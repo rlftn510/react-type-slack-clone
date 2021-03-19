@@ -41,6 +41,14 @@ const config: webpack.Configuration = {
             '@babel/preset-react',
             '@babel/preset-typescript',
           ],
+          env: {
+            development: {
+              plugins: [['@emotion/babel-plugin', { sourceMap: true }], require.resolve('react-refresh/babel')],
+            },
+            production: {
+              plugins: ['@emotion/babel-plugin'],
+            },
+          },
         },
         exclude: path.join(__dirname, 'node_modules'),
       },
@@ -60,7 +68,7 @@ const config: webpack.Configuration = {
     publicPath: '/dist/',
   },
   devServer: {
-    // historyApiFallback: true,
+    historyApiFallback: true,
     port: 3090,
     publicPath: '/dist/',
     // proxy: {
