@@ -44,9 +44,11 @@ const config: webpack.Configuration = {
           env: {
             development: {
               plugins: [['@emotion/babel-plugin', { sourceMap: true }], require.resolve('react-refresh/babel')],
+              // plugins: [['@emotion', { sourceMap: true }], require.resolve('react-refresh/babel')],
             },
             production: {
               plugins: ['@emotion/babel-plugin'],
+              // plugins: ['emotion'],
             },
           },
         },
@@ -60,10 +62,10 @@ const config: webpack.Configuration = {
   },
   plugins: [
     new ForkTsCheckerWebpackPlugin({
-      async: false
+      async: false,
     }),
     new ReactRefreshWebpackPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
   ],
   output: {
     path: path.join(__dirname, 'dist'),
