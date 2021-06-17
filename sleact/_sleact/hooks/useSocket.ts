@@ -8,9 +8,12 @@ const useSocket = (workspace?: string): [SocketIOClient.Socket | undefined, () =
     return [undefined, disconnect];
   }
   if (!sockets[workspace]) {
+    console.log(sockets);
+
     sockets[workspace] = io(`${backUrl}/ws-${workspace}`, {
       transports: ['websocket'],
     });
+    console.log(sockets[workspace]);
     console.info('create socket', workspace, sockets[workspace].id);
   }
   function disconnect() {

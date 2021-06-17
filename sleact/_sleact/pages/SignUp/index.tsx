@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Header, Button, Error, Form, Input, Label, LinkContainer, Success } from '@pages/SignUp/styles';
 import useInput from '@hooks/useInput';
 import axios from 'axios';
@@ -28,6 +28,12 @@ function SignUp() {
     },
     [password],
   );
+
+  // useEffect(() => {
+  //   axios.post('/api/users/logout', null, {
+  //     withCredentials: true,
+  //   });
+  // }, []);
 
   const onSubmit = useCallback(
     (e) => {

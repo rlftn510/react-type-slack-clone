@@ -26,6 +26,7 @@ const LogIn = () => {
           revalidate();
         })
         .catch((error) => {
+          console.log('?');
           console.error(error.response);
           setLogInError(error.response?.data);
         });
@@ -33,9 +34,9 @@ const LogIn = () => {
     [email, password],
   );
   console.log(userData);
-  // if (!userData) {
-  //   return <Redirect to="/workspace/sleact/channel/일반" />;
-  // }
+  if (userData) {
+    return <Redirect to="/workspace/sleact/channel/일반" />;
+  }
 
   return (
     <div id="container">

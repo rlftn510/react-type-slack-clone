@@ -1,22 +1,32 @@
 import { IUser } from '@typings/db';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, FC } from 'react';
 import { CollapseButton } from './styles';
 import useSWR from 'swr';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import fetcher from '@utils/fetcher';
+import useSocket from '@hooks/useSocket';
 
 interface Props {
   userData?: IUser;
 }
-const DMList = () => {
+
+const DMList: FC<Props> = ({ userData }) => {
   const [channelCollapse, setChannelCollapse] = useState(false);
   const { workspace } = useParams<{ workspace: string }>();
   const { data: memberData } = useSWR<IUser[]>(`/api/workspaces/${workspace}/members`, fetcher);
   const toggleChannelCollapse = useCallback(() => {
     setChannelCollapse((prev) => !prev);
   }, []);
+
+  const [socket, disconnect] = useSocket(workspace);
   const [onlineList, setOnlineList] = useState<number[]>([]);
+  useEffect(() => {
+    socket?.on('hello', (data: number[]) => {
+      console.log('?');
+      setOnlineList(data);
+    });
+  }, [socket]);
 
   return (
     <div>
@@ -47,7 +57,7 @@ const DMList = () => {
                   data-qa-presence-dnd="false"
                 />
                 <span>{member.nickname}</span>
-                {/* {member.id === userData?.id && <span> (나)</span>} */}
+                {member.id === userData?.id && <span> (나)</span>}
               </NavLink>
             );
           })}

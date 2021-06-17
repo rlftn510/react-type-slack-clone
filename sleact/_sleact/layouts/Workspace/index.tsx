@@ -15,16 +15,18 @@ import { Link, Route, Switch, useParams } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import useSWR from 'swr';
 import gravatar from 'gravatar';
-import { IWorkspace, IUser } from '../../typings/db';
+import { IWorkspace, IUser, IChannel } from '../../typings/db';
 import DMList from '@components/DMList';
+import ChannelList from '@components/ChannelList';
 import DirectMessage from '@pages/DirectMessage';
 import Channel from '@pages/Channel';
 import fetcher from '@utils/fetcher';
 import useSocket from '@hooks/useSocket';
 
 const Workspace = () => {
-  const { data: userData } = useSWR<IUser>('/api/users', fetcher);
   const { workspace } = useParams<{ workspace: string }>();
+  const { data: userData } = useSWR<IUser>('/api/users', fetcher);
+  const { data: channelData } = useSWR<IChannel[]>(`/api/workspaces/${workspace}/channels`, fetcher);
   const [socket, disconnectSocket] = useSocket(workspace);
 
   useEffect(() => {
@@ -64,7 +66,8 @@ const Workspace = () => {
         <Channels>
           <WorkspaceName>{userData?.Workspaces.find((v) => v.url === workspace)?.name}</WorkspaceName>
           <MenuScroll>
-            <DMList></DMList>
+            <ChannelList userData={userData} channelData={channelData} />
+            <DMList userData={userData} />
           </MenuScroll>
         </Channels>
         <Chats>
